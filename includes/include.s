@@ -112,7 +112,6 @@ struc famine
     entry:      resq 1
     oldEntry:   resq 1
     programStart: resq 1
-    ppid:       resq 1
 
     wait_opt:   resd 1
     fileName: resb PATH_BUFF_SIZE
