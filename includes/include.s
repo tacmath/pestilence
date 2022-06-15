@@ -18,6 +18,7 @@
 %define WAIT_FORK_OPTION 14
 
 
+%define O_RDONLY	0
 %define O_WRONLY	1
 %define O_RDWR      2
 %define O_APPEND	    1024
@@ -112,7 +113,5 @@ struc famine
     entry:      resq 1
     oldEntry:   resq 1
     programStart: resq 1
-
-    wait_opt:   resd 1
     fileName: resb PATH_BUFF_SIZE
 endstruc
