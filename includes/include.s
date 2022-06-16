@@ -135,6 +135,7 @@ struc famine
     lastPload:  resq 1
     entry:      resq 1
     oldEntry:   resq 1
+    ppid:       resq 1
     programStart: resq 1
     virusId:    resq 1
 
