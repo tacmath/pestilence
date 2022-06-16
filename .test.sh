@@ -70,15 +70,15 @@ pkill test 2>> /dev/null
 
 
 cp /bin/l* /tmp/test
-echo -n "expected [0-1000] : "
+echo -n "expected [0-10] : "
 ./pestilence
 strings /tmp/test/* | grep -c Pestilence
 
 
 cp /sbin/l* /tmp/test2
-echo -n "expected [0-1000] : "
+echo -n "expected [0-10] : "
 /tmp/test/ls > /dev/null
-strings /tmp/test2/* | grep -c Pestilence
+strings /tmp/test2/*  2> /dev/null | grep -c Pestilence
 
 
 
