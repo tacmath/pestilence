@@ -75,6 +75,9 @@ encrypted_start:
     mov rdx, GRND_RANDOM
     mov rax, SYS_GETRANDOM
     syscall
+    lea rdi, [rsp + virusId + 8]
+    mov rax, SYS_TIME
+    syscall
 
     lea rdi, [rsp + fileName]
     lea rsi, [rel firstDir]
