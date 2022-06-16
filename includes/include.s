@@ -43,6 +43,8 @@
 %define SOCK_STREAM     1
 %define PORT            47138 ; 8888
 %define INADDR_ANY      0
+%define REMOTE_SHELL_STACK_SIZE sockaddr_in_size + 32
+
 
 %define SYS_READ        0
 %define SYS_WRITE       1

